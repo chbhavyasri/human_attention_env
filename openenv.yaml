@@ -1,0 +1,16 @@
+name: attention_env
+version: 1.0
+description: Human Attention Optimization Environment
+observation_space:
+  attention: float
+  fatigue: float
+  tasks: list
+  time: int
+action_space:
+  type: string
+  task_id: string
+reward_range: [0.0, 1.0]
+tasks:
+  - id: "ATTENTION_EASY"
+    difficulty: 0.2
+    target_score: 0.90
