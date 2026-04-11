@@ -7,8 +7,7 @@ def get_config():
 
 def grade_easy(obs, total_reward):
     completed = len(obs.completed_task_ids)
-    total = 1
-    raw_score = completed / total
-    # Scale from [0, 1] to [0.01, 0.99]
-    final_score = (raw_score * 0.98) + 0.01
-    return round(final_score, 3)
+    raw_score = completed / 1.0 # Easy has 1 task
+    # This formula forces the result to stay between 0.05 and 0.95
+    final_score = 0.05 + (raw_score * 0.90)
+    return float(round(final_score, 3))

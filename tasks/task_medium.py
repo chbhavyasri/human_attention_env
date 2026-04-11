@@ -8,8 +8,6 @@ def get_config():
 
 def grade_medium(obs, total_reward):
     completed = len(obs.completed_task_ids)
-    total = 2
-    raw_score = completed / total
-    # Scale from [0, 1] to [0.01, 0.99]
-    final_score = (raw_score * 0.98) + 0.01
-    return round(final_score, 3)
+    raw_score = completed / 2.0 # Medium has 2 tasks
+    final_score = 0.05 + (raw_score * 0.90)
+    return float(round(final_score, 3))

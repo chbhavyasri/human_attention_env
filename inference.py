@@ -5,7 +5,7 @@ from env.environment import AttentionEnv
 from tasks import task_easy, task_medium, task_hard
 from models.schema import Action
 
-# 1. Initialize OpenAI Client using Scaler's Injected Variables
+# Use Scaler's Proxy
 client = OpenAI(
     base_url=os.environ.get("API_BASE_URL"),
     api_key=os.environ.get("API_KEY")
@@ -13,22 +13,18 @@ client = OpenAI(
 MODEL_NAME = os.environ.get("MODEL_NAME", "gpt-4o")
 
 def get_ai_decision(obs):
-    prompt = f"Manage human attention. State: {obs.model_dump_json()}. Respond with ONLY JSON: {{\"type\": \"FOCUS|SWITCH|BREAK\", \"task_id\": \"ID\", \"reasoning\": \"...\"}}"
-    
+    prompt = f"Manage attention. State: {obs.model_dump_json()}. Respond with ONLY JSON: {{\"type\": \"FOCUS|SWITCH|BREAK\", \"task_id\": \"ID\", \"reasoning\": \"...\"}}"
     try:
         response = client.chat.completions.create(
             model=MODEL_NAME,
             messages=[{"role": "user", "content": prompt}],
-            response_format={"type": "json_object"} # Scaler/Meta proxy supports this
+            response_format={"type": "json_object"}
         )
-        content = response.choices[0].message.content
-        return Action(**json.loads(content))
-    except Exception as e:
-        # Failsafe logic
-        if obs.fatigue > 75: return Action(type="BREAK", reasoning="Fatigue high")
-        if obs.current_task: return Action(type="FOCUS", reasoning="Focusing")
-        if obs.tasks: return Action(type="SWITCH", task_id=obs.tasks[0].id, reasoning="Switching")
-        return Action(type="IDLE", reasoning=f"Error: {str(e)}")
+        return Action(**json.loads(response.choices[0].message.content))
+    except:
+        if obs.fatigue > 75: return Action(type="BREAK", reasoning="Fatigue")
+        if obs.current_task: return Action(type="FOCUS", reasoning="Focus")
+        return Action(type="SWITCH", task_id=obs.tasks[0].id if obs.tasks else "", reasoning="Switch")
 
 def run():
     scenarios = [
@@ -54,8 +50,9 @@ def run():
             print(f"reward={reward.value:.2f}")
 
         score = grader(obs, total_reward)
+        # CRITICAL FIX: Use 3 decimal places to prevent rounding up to 1.00
         print("[END]")
-        print(f"final_score={score:.2f}")
+        print(f"final_score={score:.3f}")
 
 if __name__ == "__main__":
     run()
