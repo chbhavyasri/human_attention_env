@@ -3,7 +3,7 @@ import json
 import time
 from env.environment import AttentionEnv
 from tasks import task_easy
-from huggingface_hub import InferenceClient
+from huggingface_hub import InferenceClient 
 from models.schema import Action
 
 # IMPLEMENTED: YOUR HUGGING FACE TOKEN
