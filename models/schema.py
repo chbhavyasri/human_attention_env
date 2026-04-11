@@ -10,17 +10,17 @@ class Task(BaseModel):
     completed: bool = False
 
 class Observation(BaseModel):
-    current_task: Optional[str]
-    tasks: List[Task]
-    attention: float
-    fatigue: float
-    time: int
-    completed_task_ids: List[str]
+    current_task: Optional[str] = ""
+    tasks: List[Task] = []
+    attention: float = 0.0
+    fatigue: float = 0.0
+    time: int = 0
+    completed_task_ids: List[str] = []
 
 class Action(BaseModel):
     type: str 
-    task_id: Optional[str] = None
-    reasoning: str
+    task_id: Optional[str] = ""
+    reasoning: Optional[str] = ""
 
 class Reward(BaseModel):
     value: float

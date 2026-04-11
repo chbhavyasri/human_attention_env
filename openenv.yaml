@@ -1,19 +1,19 @@
-name: attention_optimizer
-version: "1.0"
-description: Human Attention Optimization Environment
+name: "attention_optimizer"
+version: "1.0.0"
+description: "Human Attention Optimization Environment"
 
 observation_space:
-  attention: float
-  fatigue: float
-  tasks: list
-  time: int
-  current_task: string
-  completed_task_ids: list
+  current_task: "string"
+  tasks: "list"
+  attention: "float"
+  fatigue: "float"
+  time: "int"
+  completed_task_ids: "list"
 
 action_space:
-  type: string
-  task_id: string
-  reasoning: string
+  type: "string"
+  task_id: "string"
+  reasoning: "string"
 
 reward_range: [0.0, 1.0]
 
