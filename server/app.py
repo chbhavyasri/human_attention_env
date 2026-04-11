@@ -1,4 +1,5 @@
 import os
+import uvicorn
 from fastapi import FastAPI, Body
 from env.environment import AttentionEnv
 from tasks import task_easy, task_medium, task_hard
@@ -21,7 +22,6 @@ def reset(task_id: str = Body(default="ATTENTION_EASY", embed=True)):
 @app.post("/step")
 def step(action: Action):
     obs, reward, done, info = env.step(action)
-    # Return reward as a FLOAT directly for max compatibility
     return {
         "observation": obs.model_dump(),
         "reward": float(reward.value),
@@ -29,6 +29,9 @@ def step(action: Action):
         "info": info
     }
 
-@app.get("/state")
-def state():
-    return env.state().model_dump()
+# This function is required for the [project.scripts] entry point
+def run_server():
+    uvicorn.run(app, host="0.0.0.0", port=8000)
+
+if __name__ == "__main__":
+    run_server()
