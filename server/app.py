@@ -1,4 +1,3 @@
-import os
 import uvicorn
 from fastapi import FastAPI, Body
 from env.environment import AttentionEnv
@@ -29,9 +28,10 @@ def step(action: Action):
         "info": info
     }
 
-# This function is required for the [project.scripts] entry point
-def run_server():
+# The validator specifically looks for a function named 'main'
+def main():
     uvicorn.run(app, host="0.0.0.0", port=8000)
 
+# The validator specifically looks for this block
 if __name__ == "__main__":
-    run_server()
+    main()
