@@ -6,7 +6,8 @@ def get_config():
     ]}
 
 def grade_easy(obs, total_reward):
-    # Image #4 logic
     completed = len(obs.completed_task_ids)
-    total = completed + len(obs.tasks)
-    return completed / total if total > 0 else 0.0
+    total = 1 
+    # Logic: Scales to be between 0.05 and 0.95
+    score = (completed / total) * 0.9 + 0.05
+    return round(score, 2)

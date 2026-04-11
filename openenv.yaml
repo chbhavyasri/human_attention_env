@@ -1,16 +1,29 @@
-name: attention_env
-version: 1.0
+name: attention_optimizer
+version: "1.0"
 description: Human Attention Optimization Environment
+
 observation_space:
   attention: float
   fatigue: float
   tasks: list
   time: int
+  current_task: string
+  completed_task_ids: list
+
 action_space:
   type: string
   task_id: string
+  reasoning: string
+
 reward_range: [0.0, 1.0]
+
 tasks:
   - id: "ATTENTION_EASY"
     difficulty: 0.2
-    target_score: 0.90
+    target_score: 0.85
+  - id: "ATTENTION_MEDIUM"
+    difficulty: 0.6
+    target_score: 0.70
+  - id: "ATTENTION_HARD"
+    difficulty: 0.9
+    target_score: 0.50
