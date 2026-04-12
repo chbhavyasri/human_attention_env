@@ -1,6 +1,7 @@
 from models.schema import Task
 
 def get_config():
+    # Difficulty: 0.6
     return {"max_steps": 40, "tasks": [
         Task(id="M1", name="Coding", priority=5, deadline=20, remaining_work=15),
         Task(id="M2", name="Review", priority=2, deadline=35, remaining_work=8)
@@ -8,6 +9,4 @@ def get_config():
 
 def grade_medium(obs, total_reward):
     completed = len(obs.completed_task_ids)
-    raw_score = completed / 2.0 # Medium has 2 tasks
-    final_score = 0.05 + (raw_score * 0.90)
-    return float(round(final_score, 3))
+    return float(completed / 2.0)
