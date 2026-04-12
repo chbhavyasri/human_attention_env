@@ -28,10 +28,8 @@ def step(action: Action):
         "info": info
     }
 
-# The validator specifically looks for a function named 'main'
 def main():
     uvicorn.run(app, host="0.0.0.0", port=8000)
 
-# The validator specifically looks for this block
 if __name__ == "__main__":
     main()
