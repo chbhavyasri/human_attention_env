@@ -9,5 +9,10 @@ def get_config():
     ]}
 
 def grade_hard(obs, total_reward):
+    # Counts how many of the 3 tasks are finished
     completed = len(obs.completed_task_ids)
-    return float(completed / 3.0)
+    raw_score = float(completed / 3.0)
+    
+    # Transformation to stay strictly between 0 and 1
+    # 0 tasks -> 0.01 | 3 tasks -> 0.99
+    return 0.01 + (raw_score * 0.98)

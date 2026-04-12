@@ -21,10 +21,13 @@ def get_ai_decision(obs):
             response_format={"type": "json_object"}
         )
         return Action(**json.loads(response.choices[0].message.content))
-    except:
-        if obs.fatigue > 75: return Action(type="BREAK", reasoning="Fatigue")
-        if obs.current_task: return Action(type="FOCUS", reasoning="Focus")
-        return Action(type="SWITCH", task_id=obs.tasks[0].id if obs.tasks else "", reasoning="Switch")
+    except Exception:
+        # Fallback logic if API fails
+        if obs.fatigue > 75: 
+            return Action(type="BREAK", reasoning="High fatigue fallback")
+        if obs.current_task: 
+            return Action(type="FOCUS", reasoning="Maintain focus fallback")
+        return Action(type="SWITCH", task_id=obs.tasks[0].id if obs.tasks else "", reasoning="Initial task fallback")
 
 def run():
     scenarios = [
@@ -49,12 +52,10 @@ def run():
             print(f"action={action.type}")
             print(f"reward={reward.value:.2f}")
 
-        # --- THE ULTIMATE SCORE FIX ---
-        raw_score = grader(obs, total_reward)
-        
-        # Mapping [0, 1] to [0.01, 0.99]
-        # This makes it physically impossible to print 0.0 or 1.0
-        final_score = 0.01 + (raw_score * 0.98)
+        # --- UPDATED SCORE LOGIC ---
+        # The individual grader functions now handle the (0, 1) constraint.
+        # This prevents "out of range" errors during Task Validation.
+        final_score = grader(obs, total_reward)
         
         print("[END]")
         print(f"final_score={final_score:.4f}")
